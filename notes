@@ -1,0 +1,21 @@
+#d3.js src:
+wget https://github.com/mbostock/d3/releases/download/v3.5.5/d3.zip
+
+#dc.js:
+target=./static/lib/js
+wget https://github.com/dc-js/dc.js/blob/develop/dc.js -O ${target}/dc.js
+target=./static/lib/css
+wget https://github.com/dc-js/dc.js/blob/develop/dc.css -O ${target}/dc.css
+
+#country geojson:
+target=./static/geojson
+wget https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson -O ${target}/countries.geojson
+
+#us geojson:
+# this is awesome:
+https://github.com/johan/world.geo.json/tree/master/countries/USA
+
+# packages:
+pip install pycountry
+pip install us
+
