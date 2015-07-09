@@ -1,5 +1,8 @@
 #d3.js src:
-wget https://github.com/mbostock/d3/releases/download/v3.5.5/d3.zip
+wget https://github.com/mbostock/d3/releases/download/v3.5.5/d3.zip -O /tmp/d3.zip
+unzip /tmp/d3.zip -d /tmp
+target=./static/lib/js
+cp /tmp/d3*.js $target
 
 #dc.js:
 target=./static/lib/js
@@ -7,15 +10,46 @@ wget https://github.com/dc-js/dc.js/blob/develop/dc.js -O ${target}/dc.js
 target=./static/lib/css
 wget https://github.com/dc-js/dc.js/blob/develop/dc.css -O ${target}/dc.css
 
+#crossfilter:
+target=./static/lib/js
+wget https://raw.githubusercontent.com/square/crossfilter/master/crossfilter.js -O ${target}/crossfilter.js
+
 #country geojson:
 target=./static/geojson
 wget https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson -O ${target}/countries.geojson
 
+#queue.js:
+target=./static/lib/js
+wget https://raw.githubusercontent.com/mbostock/queue/master/queue.js -O ${target}/queue.js
+
 #us geojson:
 # this is awesome:
-https://github.com/johan/world.geo.json/tree/master/countries/USA
+##https://github.com/johan/world.geo.json/tree/master/countries/USA
+#... but, best source found for quick downloadable geojson is currently this:
+target=./static/geojson
+wget http://eric.clst.org/wupl/Stuff/gz_2010_us_040_00_500k.json -O ${target}/us.geojson
 
 # packages:
+
+# for 2-to-3-country abbrev. conversion:
 pip install pycountry
+# for state abbrev to state name conversion:
 pip install us
 
+#purpose:
+# get location data of IP addresses
+# . individual IP addresses
+# . IPs associated with websites (ie by digging url)
+# . store into database
+# . data format { [site - optional]: {
+# 			IP address: {
+#				city:
+#				state:
+#				postal:
+#				country:
+#				latitude:
+#				longitude:
+#				}
+#			}}
+#
+# . create map, color coding countries / states based on number of IPs associated with that territory
