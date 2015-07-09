@@ -1,9 +1,20 @@
 queue()
-    .defer(d3.json, "/donorschoose/projects")
-    .defer(d3.json, "static/geojson/us-states.json")
-    .await(makeGraphs);
+	.defer(d3.json, "/donorschoose/projects")
+	.defer(d3.json, "static/geojson/us-states.json")
+	.await(makeGraphs);
 
 function makeGraphs(error, projectsJson, statesJson) {
+
+	// get the different json sources into variables:
+	var xhReq = new XMLHttpRequest();
+	var url = '/json';
+	xhReq.open("GET", url, false);
+	xhReq.send(null);
+	var json = JSON.parse(xhReq.responseText);
+	
+	//
+	d["total_donations"] = +d["total_donations"];
+
 
 	var usChart = dc.geoChoroplethChart("#us-chart");
 
