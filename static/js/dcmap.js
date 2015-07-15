@@ -23,7 +23,7 @@ function makeGraphs(error, sitesJson, worldJson) {
 		}
         });
 
-	var max_country = totalIpsByCountry.top(1)[0].value;
+	// var max_country = totalIpsByCountry.top(1)[0].value;
 
 	//var worldDim = ndx.dimension(function(d) { return d['
 	worldChart.width(1000)
@@ -31,14 +31,15 @@ function makeGraphs(error, sitesJson, worldJson) {
 		.dimension(countryDim)
 		.group(totalIpsByCountry)
 		.colors(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"])
-		.colorDomain([0, max_country])
+		//.colorDomain([0, max_country])
+		.colorDomain([0, 5])
 		.overlayGeoJson(worldJson["features"], "country", function (d) {
 			if (d.properties.featurecla == "Admin-0 country") {
 				return d.properties.sov_a3;
 			}
 		})
 		.projection(d3.geo.conicEquidistant()
-				.scale(600)
+				.scale(150)
 				// .translate([340, 150]))
 				//.translate([400, 200]))
 		/*.title(function (p) {
