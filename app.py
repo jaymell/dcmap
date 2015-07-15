@@ -11,7 +11,7 @@ app = Flask(__name__)
 MONGODB_HOST = 'localhost'
 MONGODB_PORT = 27017
 DB_NAME = 'top_sites'
-COLLECTION_NAME = 'sites'
+COLLECTION_NAME = 'dcmap'
 connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
 collection = connection[DB_NAME][COLLECTION_NAME]
 
@@ -66,33 +66,7 @@ def _get_country():
 					#print('THREE LETTER! %s' % three_letter)
 		new_collection.insert_one(site_dict)
 		
-@app.route("/json/country")
-def get_json_country():
-	""" convert json from coords to country name """
-
-	collection = connection[DB_NAME]['sites_country']
-	sites = [ i for i in collection.find({}, {'_id': False}) ]
-	sites = json.dumps(sites, default=json_util.default)
-	return sites
-
-@app.route("/test")
-def test():
-        return render_template("test.html")
-
 if __name__ == "__main__":
 	app.run(host='0.0.0.0',port=5555,debug=True)
 
 
-""" get raw address data from sites json:
-from app import *
-import json
-a = json.loads(get_json())
-for site_dict in a:
-        for site, data in site_dict.items():
-                for ip, ip_data in data.items():
-                        try:
-                                print ip_data['address'].split()[-1]
-                        except:
-                                pass
-
-"""
