@@ -29,33 +29,35 @@ function makeGraphs(error, sitesJson, worldJson) {
                         }
                 }});
 
-	
-	// var max_country = totalIpsByCountry.top(1)[0].value;
-
-	//var worldDim = ndx.dimension(function(d) { return d['
-	worldChart.width(1000)
-		.height(330)
+	var max_country = totalIpsByCountry.top(1)[0].value;
+	var height = 800;
+	var width = 1200;
+	worldChart
+		.height(800)
+		.width(1200)
 		.dimension(countryDim)
 		.group(totalIpsByCountry)
 		.colors(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"])
 		//.colorDomain([0, max_country])
 		.colorDomain([0, 10])
+		.colorCalculator(function (d) { return d ? worldChart.colors()(d) : '#ccc';})
 		.overlayGeoJson(worldJson["features"], "country", function (d) {
-			//if (d.properties.featurecla == "Admin-0 country") {
-			if (d.properties.featurecla == "Admin-0 country") {
-				return d.properties.iso_a3;
-			}
+			return d.properties.iso_a3;
 		})
-		.projection(d3.geo.conicEquidistant()
-				.scale(150)
-				// .translate([340, 150]))
-				//.translate([400, 200]))
-		/*.title(function (p) {
-			return "State: " + p["key"]
+		
+		//.projection(d3.geo.conicEquidistant()
+		/* prefer this projection, but for some reason, all other variables held constant,
+			draws most countries same color as ocean... not sure why 
+		.projection(d3.geo.mercator()
+		*/
+		.projection(d3.geo.equirectangular())
+		.title(function (d) {
+			var country = d.key;
+			var total = d.value ? d.value : 0;
+			return "Country: " + country
 				 + "\n"
-				 + "Total Donations: " + Math.round(p["value"]) + " $";
-		}*/)
-
+				 + "Total Sites: " + total + " Sites";
+		})
 dc.renderAll();
 
 }
