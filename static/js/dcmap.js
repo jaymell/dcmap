@@ -31,7 +31,7 @@ function makeGraphs(error, sitesJson, worldJson) {
 
 	var max_country = totalIpsByCountry.top(1)[0].value;
 	var height = 800;
-	var width = 1200;
+	var width = 1600;
 	worldChart
 		.height(800)
 		.width(1200)
@@ -47,7 +47,7 @@ function makeGraphs(error, sitesJson, worldJson) {
 		
 		//.projection(d3.geo.conicEquidistant()
 		/* prefer this projection, but for some reason, all other variables held constant,
-			draws most countries same color as ocean... not sure why 
+			draws most countries same color as ocean... not sure why:
 		.projection(d3.geo.mercator()
 		*/
 		.projection(d3.geo.equirectangular())
