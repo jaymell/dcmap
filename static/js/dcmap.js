@@ -30,11 +30,11 @@ function makeGraphs(error, sitesJson, worldJson) {
                 }});
 
 	var max_country = totalIpsByCountry.top(1)[0].value;
-	var height = 800;
-	var width = 1600;
+	//var height = 800;
+	//var width = 1600;
 	worldChart
 		.height(800)
-		.width(1200)
+		.width(1600)
 		.dimension(countryDim)
 		.group(totalIpsByCountry)
 		.colors(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"])
@@ -45,12 +45,15 @@ function makeGraphs(error, sitesJson, worldJson) {
 			return d.properties.iso_a3;
 		})
 		
-		//.projection(d3.geo.conicEquidistant()
 		/* prefer this projection, but for some reason, all other variables held constant,
 			draws most countries same color as ocean... not sure why:
 		.projection(d3.geo.mercator()
 		*/
-		.projection(d3.geo.equirectangular())
+		.projection(d3.geo.equirectangular()
+			.scale(200)
+			.center([-97,33])
+			//.translate([200,-200])
+		)
 		.title(function (d) {
 			var country = d.key;
 			var total = d.value ? d.value : 0;
