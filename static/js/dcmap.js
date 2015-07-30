@@ -5,10 +5,8 @@ queue()
 
 function makeGraphs(error, sitesJson, worldJson) {
 
-	/* Fill in the missing shit */
-
 	var topSites = sitesJson;
-	var worldChart = dc.geoChoroplethChart("#world-chart");
+	var worldChart = dc.geoChoroplethChart("#world-chart")
 
 	// crossfilter
 	var ndx = crossfilter(topSites);
@@ -32,9 +30,36 @@ function makeGraphs(error, sitesJson, worldJson) {
 	var max_country = totalIpsByCountry.top(1)[0].value;
 	//var height = 800;
 	//var width = 1600;
+
+	var height = 800;
+	var width = 1600;
+
+	var projection = d3.geo.equirectangular()
+                        .scale(200)
+                        .center([-97,33]);
+
+	function zoomed() {
+	    projection 
+	    .translate(d3.event.translate)
+	    .scale(d3.event.scale);
+	    worldChart.render();
+	}
+
+	var zoom = d3.behavior.zoom()
+		.translate(projection.translate())
+		//.scale(projection.scale())
+		.scale(1 << 8) // not sure why, but 8 seems like a good number
+		//.scaleExtent([height/2, 8 * height]) // defines the max amount you can zoom
+		.on("zoom", zoomed);
+
+	var svg = d3.select("#world-chart")
+	    .attr("width", width)
+	    .attr("height", height)
+	    .call(zoom);
+
 	worldChart
-		.height(800)
-		.width(1600)
+		.height(height)
+		.width(width)
 		.dimension(countryDim)
 		.group(totalIpsByCountry)
 		.colors(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"])
@@ -44,16 +69,7 @@ function makeGraphs(error, sitesJson, worldJson) {
 		.overlayGeoJson(worldJson["features"], "country", function (d) {
 			return d.properties.iso_a3;
 		})
-		
-		/* prefer this projection, but for some reason, all other variables held constant,
-			draws most countries same color as ocean... not sure why:
-		.projection(d3.geo.mercator()
-		*/
-		.projection(d3.geo.equirectangular()
-			.scale(200)
-			.center([-97,33])
-			//.translate([200,-200])
-		)
+		.projection(projection)
 		.title(function (d) {
 			var country = d.key;
 			var total = d.value ? d.value : 0;
@@ -61,6 +77,7 @@ function makeGraphs(error, sitesJson, worldJson) {
 				 + "\n"
 				 + "Total Sites: " + total + " Sites";
 		})
+
 dc.renderAll();
 
 }
