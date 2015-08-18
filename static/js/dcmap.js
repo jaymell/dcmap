@@ -1,9 +1,10 @@
 queue()
 	.defer(d3.json, "/json")
 	.defer(d3.json, "static/geojson/countries.geojson")
+	.defer(d3.json, "static/geojson/trail.geojson")
 	.await(makeGraphs);
 
-function makeGraphs(error, sitesJson, worldJson) {
+function makeGraphs(error, sitesJson, worldJson, trailJson) {
 
 	var topSites = sitesJson;
 	var worldChart = dc.geoChoroplethChart("#world-chart")
@@ -28,8 +29,6 @@ function makeGraphs(error, sitesJson, worldJson) {
                 }});
 
 	var max_country = totalIpsByCountry.top(1)[0].value;
-	//var height = 800;
-	//var width = 1600;
 
 	var height = 800;
 	var width = 1600;
@@ -69,6 +68,8 @@ function makeGraphs(error, sitesJson, worldJson) {
 		.overlayGeoJson(worldJson["features"], "country", function (d) {
 			return d.properties.iso_a3;
 		})
+                .overlayGeoJson(trailJson["features"], "trail")
+
 		.projection(projection)
 		.title(function (d) {
 			var country = d.key;
